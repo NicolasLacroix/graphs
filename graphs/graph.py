@@ -73,9 +73,13 @@ class Tree(object):
         return False
     
     def getMinDepth(self):
-        # TODO
-        pass
+        if len(self.children) > 0:
+            return 1 + min([child.getMinDepth() for child in self.children])
+        else:
+            return 0
     
     def getMaxDepth(self):
-        # TODO
-        pass
+        if len(self.children) > 0:
+            return 1 + max([child.getMaxDepth() for child in self.children])
+        else:
+            return 0
