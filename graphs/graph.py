@@ -73,13 +73,33 @@ class Tree(object):
         return False
     
     def getMinDepth(self):
+        """Return the minimal depth of current tree's branches
+        
+        :return: 
+        """
         if len(self.children) > 0:
             return 1 + min([child.getMinDepth() for child in self.children])
         else:
             return 0
     
     def getMaxDepth(self):
+        """Return the maximal depth of current tree's branches
+        
+        :return:
+        """
         if len(self.children) > 0:
             return 1 + max([child.getMaxDepth() for child in self.children])
         else:
             return 0
+    
+    def equals(self, other):
+        """Return whether other equals self or not
+        
+        :param other:
+        :return:
+        """
+        if isinstance(other, self.__class__) and self.node == other.node:
+            if len(self.children) != len(other.children):
+                return False
+            return True and all(child.equals(otherChild) for child, otherChild in zip(self.children, other.children))
+        return False

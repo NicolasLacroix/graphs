@@ -12,6 +12,7 @@ class GraphTest(unittest.TestCase):
         self.nodeA = "a"
         self.nodeB = "b"
         self.nodeC = "c"
+        self.branches = [Tree("a1"), Tree("a2")]
     
     def testAddNode(self):
         self.tree.addNode(self.nodeA)
@@ -29,26 +30,24 @@ class GraphTest(unittest.TestCase):
         
     def testGetMinDepth(self):
         minDepth = 3
-        branches = [Tree("a1"), Tree("a2")]
         for i in range(9):
-            branches[0].addNode("a"+str(i))
+            self.branches[0].addNode("a"+str(i))
         for i in range(2):
-            branches[1].addNode("b"+str(i))
+            self.branches[1].addNode("b"+str(i))
         self.assertEqual(0, Tree().getMinDepth())
         self.assertEqual(0, Tree("A").getMinDepth())
-        self.tree.children = branches
+        self.tree.children = self.branches
         self.assertEqual(minDepth, self.tree.getMinDepth())
     
     def testGetMaxDepth(self):
         maxDepth = 10
-        branches = [Tree("a1"), Tree("a2")]
         for i in range(9):
-            branches[0].addNode("a" + str(i))
+            self.branches[0].addNode("a" + str(i))
         for i in range(2):
-            branches[1].addNode("b" + str(i))
+            self.branches[1].addNode("b" + str(i))
         self.assertEqual(0, Tree().getMaxDepth())
         self.assertEqual(0, Tree("A").getMaxDepth())
-        self.tree.children = branches
+        self.tree.children = self.branches
         self.assertEqual(maxDepth, self.tree.getMaxDepth())
     
     def testRemoveNode(self):
@@ -58,7 +57,32 @@ class GraphTest(unittest.TestCase):
         self.assertFalse(self.tree.containsNode(self.nodeA))
         self.tree.removeNode("b")
         self.assertFalse(self.tree.containsNode(self.nodeB))
-        self.tree.removeNode("c")  # TODO: raise error
+        self.tree.removeNode("c")
+        
+    def testEquals(self):
+        # tests equals between different types
+        self.assertFalse(self.tree.equals(None))
+        self.assertFalse(self.tree.equals(True))
+        self.assertFalse(self.tree.equals("a"))
+        self.assertFalse(self.tree.equals(1))
+        # tests equals with (node = None)
+        self.assertTrue(self.tree.equals(Tree()))
+        # tests equals with (len(branches) == 0)
+        self.tree.addNode("a1")
+        self.assertTrue(self.tree.equals(self.branches[0]))
+        self.assertFalse(self.tree.equals(self.branches[1]))
+        # tests equals with (len(branches) > 0)
+        self.tree.addNode("b1")
+        self.tree.addNode("c1")
+        self.branches[0].addNode("b1")
+        self.branches[0].addNode("c1")
+        self.assertTrue(self.tree.equals(self.branches[0]))
+        self.branches[1].addNode("b1")
+        self.branches[1].addNode("c2")
+        self.assertFalse(self.tree.equals(self.branches[1]))
+        # tests equals with different lengths of branches
+        self.branches[0].addNode("d1")
+        self.assertFalse(self.tree.equals(self.branches[0]))
 
 
 if __name__ == '__main__':
