@@ -2,22 +2,25 @@
 
 import unittest
 
-from graphs.graph import Tree
+from graphs.graph import BinaryTree
 
 
-class TestTree(unittest.TestCase):
+# TODO: improve this test case
+
+class TestBinaryTree(unittest.TestCase):
     
     def setUp(self):
-        self.tree = Tree()
+        self.tree = BinaryTree()
         self.nodeA = "a"
         self.nodeB = "b"
         self.nodeC = "c"
-        self.branches = [Tree("a1"), Tree("a2")]
+        self.branches = [BinaryTree("a1"), BinaryTree("a2")]
     
     def testAddNode(self):
         self.tree.addNode(self.nodeA)
         self.assertEqual(self.nodeA, self.tree.root)
         self.tree.addNode(self.nodeB)
+        self.assertEqual(self.nodeB, self.tree.leftChild.root)
         self.assertEqual(self.nodeB, self.tree.children[0].root)
     
     def testContainsNode(self):
@@ -26,15 +29,15 @@ class TestTree(unittest.TestCase):
         self.assertTrue(self.tree.containsNode(self.nodeA))
         self.assertTrue(self.tree.containsNode(self.nodeB))
         self.assertFalse(self.tree.containsNode(self.nodeC))
-        
+    
     def testGetMinDepth(self):
         minDepth = 3
         for i in range(9):
-            self.branches[0].addNode("a"+str(i))
+            self.branches[0].addNode("a" + str(i))
         for i in range(2):
-            self.branches[1].addNode("b"+str(i))
-        self.assertEqual(0, Tree().getMinDepth())
-        self.assertEqual(0, Tree("A").getMinDepth())
+            self.branches[1].addNode("b" + str(i))
+        self.assertEqual(0, BinaryTree().getMinDepth())
+        self.assertEqual(0, BinaryTree("A").getMinDepth())
         self.tree.children = self.branches
         self.assertEqual(minDepth, self.tree.getMinDepth())
     
@@ -44,8 +47,8 @@ class TestTree(unittest.TestCase):
             self.branches[0].addNode("a" + str(i))
         for i in range(2):
             self.branches[1].addNode("b" + str(i))
-        self.assertEqual(0, Tree().getMaxDepth())
-        self.assertEqual(0, Tree("A").getMaxDepth())
+        self.assertEqual(0, BinaryTree().getMaxDepth())
+        self.assertEqual(0, BinaryTree("A").getMaxDepth())
         self.tree.children = self.branches
         self.assertEqual(maxDepth, self.tree.getMaxDepth())
     
@@ -57,7 +60,7 @@ class TestTree(unittest.TestCase):
         self.tree.removeNode("b")
         self.assertFalse(self.tree.containsNode(self.nodeB))
         self.tree.removeNode("c")
-        
+    
     def testEquals(self):
         # tests equals between different types
         self.assertFalse(self.tree.equals(None))
@@ -65,7 +68,7 @@ class TestTree(unittest.TestCase):
         self.assertFalse(self.tree.equals("a"))
         self.assertFalse(self.tree.equals(1))
         # tests equals with (node = None)
-        self.assertTrue(self.tree.equals(Tree()))
+        self.assertTrue(self.tree.equals(BinaryTree()))
         # tests equals with (len(branches) == 0)
         self.tree.addNode("a1")
         self.assertTrue(self.tree.equals(self.branches[0]))
